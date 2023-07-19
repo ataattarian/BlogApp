@@ -1,6 +1,6 @@
-from rest_framework import viewsets
-from blog.serializers import BlogSerializer
-from blog.models import BlogModel
+from rest_framework import viewsets, generics
+from blog.serializers import BlogSerializer, RateSerializer
+from blog.models import BlogModel, RateModel
 from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
@@ -20,3 +20,8 @@ class BlogView(viewsets.ModelViewSet):
             return BlogModel.objects.all()
         else:
             return BlogModel.objects.filter(author=self.request.user)
+
+
+class RateView(generics.CreateAPIView):
+    model = RateModel
+    serializer_class = RateSerializer
