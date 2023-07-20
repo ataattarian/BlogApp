@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from blog.models import BlogModel, RateModel
 from django.contrib.auth.models import User
+from comment.serializers import CommentSerializer
 from django.db.models import Avg
 
 
@@ -63,19 +64,33 @@ class RateSerializer(serializers.ModelSerializer):
 class BlogSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(required=False)
     rate = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
 
     class Meta:
         model = BlogModel
-        fields = ("id", "title", "content", "publication_date", "author", "rate")
+        fields = (
+            "id",
+            "title",
+            "content",
+            "publication_date",
+            "author",
+            "rate",
+            "comments",
+        )
         extra_kwargs = {
             "author": {"read_only": True},
             "publication_date": {"read_only": True},
             "rate": {"read_only": True},
+            "comments": {"read_only": True},
         }
 
     def get_rate(self, obj):
         rate = obj.blog_rates.all().aggregate(Avg("rate"))
         return rate["rate__avg"] if rate["rate__avg"] else 0
+
+    def get_comments(self, obj):
+        comments = CommentSerializer(obj.comments.all(), many=True)
+        return comments.data
 
     def create(self, validated_data):
         blog = BlogModel.objects.create(
