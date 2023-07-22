@@ -1,7 +1,0 @@
-SECRET_KEY=Your project secret key
-MYSQL_DATABASE=Your database name
-MYSQL_USER=Your database user
-MYSQL_PASSWORD=Your database password
-MYSQL_ROOT_PASSWORD=Your database root user password
-DATABASE_MYSQL_HOST=Your hostname
-PORT=Your project port
