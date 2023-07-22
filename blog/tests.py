@@ -25,12 +25,14 @@ class BlogTest(APITestCase):
         )
         self.blog_id = request.json().get("id")
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
-    
+
     def test_update_blog(self):
         self.test_create_blog()
         data = {"title": "TestUpdate", "content": "test update content"}
         request = self.client.patch(
-            f"/api/blogs/{self.blog_id}/", data, HTTP_AUTHORIZATION=f"Bearer {self.token}"
+            f"/api/blogs/{self.blog_id}/",
+            data,
+            HTTP_AUTHORIZATION=f"Bearer {self.token}",
         )
         self.assertEquals(request.status_code, status.HTTP_200_OK)
 
