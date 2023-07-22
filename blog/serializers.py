@@ -85,7 +85,7 @@ class BlogSerializer(serializers.ModelSerializer):
         }
 
     def get_rate(self, obj):
-        rate = obj.blog_rates.all().aggregate(Avg("rate"))
+        rate = obj.blog_rates.aggregate(Avg("rate"))
         return rate["rate__avg"] if rate["rate__avg"] else 0
 
     def get_comments(self, obj):
