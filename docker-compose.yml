@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  mysql:
+    image: mysql
+    platform: linux/amd64
+    command: --max_allowed_packet=1073741824
+    env_file: ./mysql/.environment
+    ports:
+      - 3380:3306
+    volumes:
+      - mysql_volumes:/var/lib/mysql
+    restart: always
+    logging:
+      driver: none
+
+  web:
+    image: blogapp
+    build: .
+    entrypoint: /usr/src/app/entrypoint.sh
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - ${PORT}:8000
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_volumes:
